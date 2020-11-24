@@ -1,8 +1,10 @@
-import Link from "next/link";
-import { Button, Form, Input } from "antd";
-import { useCallback, useState } from "react";
-import styled from "styled-components";
-import PropTypes from "prop-types";
+import Link from 'next/link';
+import { Button, Form, Input } from 'antd';
+import { useCallback } from 'react';
+import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import useInput from '../hooks/useInput';
+import { login } from '../modules/user';
 
 const LoginFormBlock = styled.div`
   .form {
@@ -13,28 +15,17 @@ const LoginFormBlock = styled.div`
   }
 `;
 
-function LoginForm({ setIsLogin }) {
-  const [form, setForm] = useState({
-    "user-id": "",
-    "user-password": "",
-  });
-
-  const onChange = useCallback(
-    (e) => {
-      const { name, value } = e.target;
-      setForm({
-        ...form,
-        [name]: value,
-      });
-    },
-    [form]
-  );
+function LoginForm() {
+  const dispatch = useDispatch();
+  const [id, , onChangeId] = useInput('');
+  const [password, , onChangePassword] = useInput('');
 
   const onSubmit = useCallback(
     (e) => {
-      setIsLogin(true);
+      const data = { id, password };
+      dispatch(login(data));
     },
-    [form]
+    [id, password]
   );
 
   return (
@@ -43,12 +34,7 @@ function LoginForm({ setIsLogin }) {
         <div>
           <label htmlFor="user-id">ID</label>
           <br />
-          <Input
-            name="user-id"
-            value={form["user-id"]}
-            onChange={onChange}
-            required
-          />
+          <Input name="user-id" value={id} onChange={onChangeId} required />
         </div>
         <div>
           <label htmlFor="user-password">Password</label>
@@ -56,8 +42,8 @@ function LoginForm({ setIsLogin }) {
           <Input
             name="user-password"
             type="password"
-            value={form["user-password"]}
-            onChange={onChange}
+            value={password}
+            onChange={onChangePassword}
             required
           />
         </div>
@@ -75,9 +61,5 @@ function LoginForm({ setIsLogin }) {
     </LoginFormBlock>
   );
 }
-
-LoginForm.propTypes = {
-  setIsLogin: PropTypes.func.isRequired,
-};
 
 export default LoginForm;
