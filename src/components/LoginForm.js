@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button, Form, Input } from "antd";
 import { useCallback, useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const LoginFormBlock = styled.div`
   .form {
@@ -40,7 +41,7 @@ function LoginForm({ setIsLogin }) {
     <LoginFormBlock>
       <Form className="form" onFinish={onSubmit}>
         <div>
-          <label htmlFor="user-id">아이디</label>
+          <label htmlFor="user-id">ID</label>
           <br />
           <Input
             name="user-id"
@@ -50,7 +51,7 @@ function LoginForm({ setIsLogin }) {
           />
         </div>
         <div>
-          <label htmlFor="user-password">비밀번호</label>
+          <label htmlFor="user-password">Password</label>
           <br />
           <Input
             name="user-password"
@@ -62,11 +63,11 @@ function LoginForm({ setIsLogin }) {
         </div>
         <div className="button-wrapper">
           <Button type="primary" htmlType="submit" loading={false}>
-            로그인
+            Login
           </Button>
           <Link href="/register">
             <a>
-              <Button>회원가입</Button>
+              <Button>Register</Button>
             </a>
           </Link>
         </div>
@@ -74,5 +75,9 @@ function LoginForm({ setIsLogin }) {
     </LoginFormBlock>
   );
 }
+
+LoginForm.propTypes = {
+  setIsLogin: PropTypes.func.isRequired,
+};
 
 export default LoginForm;

@@ -10,22 +10,22 @@ function UserProfile({ setIsLogin }) {
     <>
       <Card
         actions={[
-          <div key="twits">
-            twits
+          <div key="fallowers">
+            fallowers
             <br />
           </div>,
           <div key="fallowings">
             fallowings
             <br />
           </div>,
-          <div key="fallowers">
-            fallowers
+          <div key="twits">
+            twits
             <br />
           </div>,
         ]}
       >
         <Card.Meta avatar={<Avatar>Y</Avatar>} title="bassyu" />
-        <Button onClick={onLogout}>로그아웃</Button>
+        <Button onClick={onLogout}>Logout</Button>
       </Card>
     </>
   );

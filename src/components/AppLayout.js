@@ -20,7 +20,7 @@ function AppLayout({ children }) {
       <Menu mode="horizontal">
         <Menu.Item>
           <Link href="/">
-            <a>logo</a>
+            <a>NodeBird</a>
           </Link>
         </Menu.Item>
         <Menu.Item>
@@ -32,8 +32,8 @@ function AppLayout({ children }) {
           <Input.Search className="search" enterButton />
         </Menu.Item>
         <Menu.Item>
-          <Link href="/signup">
-            <a>signup</a>
+          <Link href="/register">
+            <a>register</a>
           </Link>
         </Menu.Item>
       </Menu>
