@@ -11,6 +11,16 @@ import PropTypes from 'prop-types';
 import PostImages from './PostImages';
 import { useCallback, useState } from 'react';
 import CommentForm from './CommentForm';
+import styled from 'styled-components';
+import PostCardContent from './PostCardContent';
+
+const PostCardBlock = styled.div`
+  margin: 1.5rem;
+
+  .ant-card-cover {
+    transform: none !important;
+  }
+`;
 
 function PostCard({ post }) {
   const id = useSelector(({ user }) => user.me?.id); // me && me.id
@@ -25,7 +35,7 @@ function PostCard({ post }) {
   }, []);
 
   return (
-    <div style={{ marginTop: '1.5rem' }}>
+    <PostCardBlock>
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
@@ -62,7 +72,7 @@ function PostCard({ post }) {
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
           title={post.User.nickname}
-          description={post.content}
+          description={<PostCardContent content={post.content} />}
         />
       </Card>
       {commentFormOpened && (
@@ -85,7 +95,7 @@ function PostCard({ post }) {
         </div>
       )}
       {/*<Comments />*/}
-    </div>
+    </PostCardBlock>
   );
 }
 

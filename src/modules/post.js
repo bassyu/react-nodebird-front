@@ -8,7 +8,7 @@ const initialState = {
         id: 1,
         nickname: 'bassyu',
       },
-      content: 'dldldl #tag #tag',
+      content: 'dldldl #tag #tag #hash',
       Images: [
         {
           src:

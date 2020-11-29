@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
+import ImagesZoom from './ImagesZoom';
 
 function PostImages({ images }) {
   const [showZoom, setShowZoom] = useState(false);
@@ -14,12 +15,14 @@ function PostImages({ images }) {
   if (images.length === 1) {
     return (
       <>
-        <img
-          role="presentation"
-          src={images[0].src}
-          alt={images[0].src}
-          onClick={onZoom}
-        />
+        <div>
+          <img
+            role="presentation"
+            src={images[0].src}
+            alt={images[0].src}
+            onClick={onZoom}
+          />
+        </div>
         {showZoom && <ImagesZoom images={images} onClose={onClose} />}
       </>
     );
@@ -27,6 +30,29 @@ function PostImages({ images }) {
   if (images.length === 2) {
     return (
       <>
+        <div>
+          <img
+            role="presentation"
+            src={images[0].src}
+            alt={images[0].src}
+            onClick={onZoom}
+            style={{ width: '50%', display: 'inline-block' }}
+          />
+          <img
+            role="presentation"
+            src={images[1].src}
+            alt={images[1].src}
+            onClick={onZoom}
+            style={{ width: '50%', display: 'inline-block' }}
+          />
+        </div>
+        {showZoom && <ImagesZoom images={images} onClose={onClose} />}
+      </>
+    );
+  }
+  return (
+    <>
+      <div>
         <img
           role="presentation"
           src={images[0].src}
@@ -34,39 +60,22 @@ function PostImages({ images }) {
           onClick={onZoom}
           style={{ width: '50%', display: 'inline-block' }}
         />
-        <img
+        <a
           role="presentation"
-          src={images[1].src}
-          alt={images[1].src}
+          style={{
+            display: 'inline-block',
+            width: '50%',
+            textAlign: 'center',
+            verticalAlign: 'middle',
+          }}
           onClick={onZoom}
-          style={{ width: '50%', display: 'inline-block' }}
-        />
-      </>
-    );
-  }
-  return (
-    <>
-      <img
-        role="presentation"
-        src={images[0].src}
-        alt={images[0].src}
-        onClick={onZoom}
-        style={{ width: '50%', display: 'inline-block' }}
-      />
-      <a
-        role="presentation"
-        style={{
-          display: 'inline-block',
-          width: '50%',
-          textAlign: 'center',
-          verticalAlign: 'middle',
-        }}
-        onClick={onZoom}
-      >
-        <PlusOutlined />
-        <br />
-        {images.length - 1} More Images
-      </a>
+        >
+          <PlusOutlined />
+          <br />
+          {images.length - 1} More Images
+        </a>
+      </div>
+      {showZoom && <ImagesZoom images={images} onClose={onClose} />}
     </>
   );
 }
