@@ -1,19 +1,19 @@
-import { Button, Checkbox, Form, Input } from "antd";
-import Head from "next/head";
-import { useCallback, useState } from "react";
-import styled from "styled-components";
-import AppLayout from "../components/AppLayout";
-import useInput from "../hooks/useInput";
+import { Button, Checkbox, Form, Input } from 'antd';
+import Head from 'next/head';
+import { useCallback, useState } from 'react';
+import styled from 'styled-components';
+import AppLayout from '../components/AppLayout';
+import useInput from '../lib/hooks/useInput';
 
 const ErrorMessage = styled.div`
   color: red;
 `;
 
 function Signup() {
-  const [id, , onChangeId] = useInput("");
-  const [nickname, , onChangeNickname] = useInput("");
-  const [password, , onChangePassword] = useInput("");
-  const [passwordCheck, setPasswordCheck] = useState("");
+  const [id, , onChangeId] = useInput('');
+  const [nickname, , onChangeNickname] = useInput('');
+  const [password, , onChangePassword] = useInput('');
+  const [passwordCheck, setPasswordCheck] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const onChangePasswordCheck = useCallback(
     (e) => {

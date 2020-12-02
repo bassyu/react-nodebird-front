@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { Button, Input, Form } from '../../node_modules/antd/lib/index';
-import useInput from '../hooks/useInput';
+import useInput from '../lib/hooks/useInput';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 

@@ -1,12 +1,17 @@
 import { Card, Avatar, Button } from 'antd';
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { logout } from '../modules/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { LOGOUT, logoutAction } from '../modules/user';
 
 function UserProfile() {
   const dispatch = useDispatch();
+  const { me, loading } = useSelector(({ user, loading }) => ({
+    me: user.me,
+    loading,
+  }));
+
   const onLogout = useCallback(() => {
-    dispatch(logout());
+    dispatch(logoutAction());
   }, []);
 
   return (
@@ -27,8 +32,13 @@ function UserProfile() {
           </div>,
         ]}
       >
-        <Card.Meta avatar={<Avatar>Y</Avatar>} title="bassyu" />
-        <Button onClick={onLogout}>Logout</Button>
+        <Card.Meta
+          avatar={<Avatar>{me.nickname}</Avatar>}
+          title={me.nickname}
+        />
+        <Button onClick={onLogout} loading={loading[LOGOUT]}>
+          Logout
+        </Button>
       </Card>
     </>
   );

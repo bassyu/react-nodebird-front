@@ -1,5 +1,25 @@
 import { createAction, handleActions } from 'redux-actions';
+import { takeLatest, delay, put } from 'redux-saga/effects';
+import createRequestSaga from '../lib/createRequestSaga';
+import createRequestTypes from '../lib/createRequestTypes';
 
+// constants
+export const [
+  ADD_POST,
+  ADD_POST_SUCCESS,
+  ADD_POST_FAILURE,
+] = createRequestTypes('post/ADD_POST');
+
+// actions
+export const addPostAction = createAction(ADD_POST);
+
+//middlewares
+const addPostSaga = createRequestSaga(ADD_POST, api);
+export function* postSaga() {
+  yield takeLatest(ADD_POST, addPostSaga);
+}
+
+// reducer
 const initialState = {
   mainPosts: [
     {
@@ -40,10 +60,6 @@ const initialState = {
   imagePaths: [],
   postAdded: false,
 };
-
-const ADD_POST = 'post/ADD_POST';
-
-export const addPost = createAction(ADD_POST);
 
 const dummyPost = {
   id: 2,

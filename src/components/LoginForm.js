@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { Button, Form, Input } from 'antd';
 import { useCallback } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import useInput from '../hooks/useInput';
-import { login } from '../modules/user';
+import { useDispatch, useSelector } from 'react-redux';
+import useInput from '../lib/hooks/useInput';
+import { LOGIN, login } from '../modules/user';
 
 const LoginFormBlock = styled.div`
   .form {
@@ -17,13 +17,13 @@ const LoginFormBlock = styled.div`
 
 function LoginForm() {
   const dispatch = useDispatch();
+  const loading = useSelector(({ loading }) => loading);
   const [id, , onChangeId] = useInput('');
   const [password, , onChangePassword] = useInput('');
 
   const onSubmit = useCallback(
     (e) => {
-      const data = { id, password };
-      dispatch(login(data));
+      dispatch(login({ id, password }));
     },
     [id, password]
   );
@@ -48,7 +48,7 @@ function LoginForm() {
           />
         </div>
         <div className="button-wrapper">
-          <Button type="primary" htmlType="submit" loading={false}>
+          <Button type="primary" htmlType="submit" loading={loading[LOGIN]}>
             Login
           </Button>
           <Link href="/register">

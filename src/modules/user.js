@@ -1,11 +1,26 @@
 import { createAction, handleActions } from 'redux-actions';
+import createRequestTypes from '../lib/createRequestTypes';
+import { takeLatest } from 'redux-saga/effects';
 
-const LOGIN = 'user/LOGIN';
-const LOGOUT = 'user/LOGOUT';
+// constants
+export const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestTypes(
+  'user/LOGIN'
+);
+export const [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAILURE] = createRequestTypes(
+  'user/LOGOUT'
+);
 
-export const login = createAction(LOGIN, (me) => me);
-export const logout = createAction(LOGOUT);
+// actions
+export const loginAction = createAction(LOGIN, (me) => me);
+export const logoutAction = createAction(LOGOUT);
 
+//middlewares
+function loginSaga() {}
+export function* userSaga() {
+  yield takeLatest();
+}
+
+// reducer
 const initialState = {
   isLogin: false,
   me: null,
@@ -15,15 +30,21 @@ const initialState = {
 
 const user = handleActions(
   {
-    [LOGIN]: (state, { payload: me }) => ({
+    [LOGIN_SUCCESS]: (state, { payload: me }) => ({
       ...state,
       isLogin: true,
       me,
     }),
-    [LOGOUT]: (state) => ({
+    [LOGIN_FAILURE]: (state) => ({
+      ...state,
+    }),
+    [LOGOUT_SUCCESS]: (state) => ({
       ...state,
       isLogin: false,
       me: null,
+    }),
+    [LOGOUT_FAILURE]: (state) => ({
+      ...state,
     }),
   },
   initialState

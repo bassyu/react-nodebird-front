@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 import styled from 'styled-components';
 import { Button, Carousel } from '../../node_modules/antd/lib/index';
 
@@ -51,8 +50,6 @@ const ImagesZoomBlock = styled.div`
 `;
 
 function ImagesZoom({ images, onClose }) {
-  const [currentSlide, setCurrentSlide] = useState(0);
-
   return (
     <ImagesZoomBlock>
       <div className="header">

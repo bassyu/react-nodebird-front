@@ -1,4 +1,4 @@
-const { useState, useCallback } = require('react');
+const { useState, useCallback } = require('./react');
 
 function useInput(initialValue = null) {
   const [value, setValue] = useState(initialValue);
