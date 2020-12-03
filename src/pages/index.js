@@ -4,11 +4,13 @@ import PostCard from '../components/PostCard';
 import PostForm from '../components/PostForm';
 
 function Index() {
-  const isLogin = useSelector(({ user }) => user.isLogin);
-  const mainPosts = useSelector(({ post }) => post.mainPosts);
+  const { me, mainPosts } = useSelector(({ user, post }) => ({
+    me: user.me,
+    mainPosts: post.mainPosts,
+  }));
   return (
     <AppLayout>
-      {isLogin && <PostForm />}
+      {me && <PostForm />}
       {mainPosts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}

@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { Button, Form, Input } from 'antd';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import useInput from '../lib/hooks/useInput';
-import { LOGIN, login } from '../modules/user';
+import { LOGIN, loginAction } from '../modules/user';
 
 const LoginFormBlock = styled.div`
   .form {
@@ -17,24 +17,30 @@ const LoginFormBlock = styled.div`
 
 function LoginForm() {
   const dispatch = useDispatch();
-  const loading = useSelector(({ loading }) => loading);
-  const [id, , onChangeId] = useInput('');
-  const [password, , onChangePassword] = useInput('');
+  const { loading } = useSelector(({ loading }) => ({ loading }));
+  const [email, , handleEmail] = useInput('');
+  const [password, , handlePassword] = useInput('');
 
   const onSubmit = useCallback(
-    (e) => {
-      dispatch(login({ id, password }));
+    () => {
+      dispatch(loginAction({ email, password }));
     },
-    [id, password]
+    [email, password],
   );
 
   return (
     <LoginFormBlock>
       <Form className="form" onFinish={onSubmit}>
         <div>
-          <label htmlFor="user-id">ID</label>
+          <label htmlFor="user-email">ID</label>
           <br />
-          <Input name="user-id" value={id} onChange={onChangeId} required />
+          <Input
+            type="email"
+            name="user-email"
+            value={email}
+            onChange={handleEmail}
+            required
+          />
         </div>
         <div>
           <label htmlFor="user-password">Password</label>
@@ -43,7 +49,7 @@ function LoginForm() {
             name="user-password"
             type="password"
             value={password}
-            onChange={onChangePassword}
+            onChange={handlePassword}
             required
           />
         </div>

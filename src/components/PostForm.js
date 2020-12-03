@@ -1,22 +1,30 @@
 import { Button, Form, Input } from 'antd';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useInput from '../lib/hooks/useInput';
-import { addPost } from '../modules/post';
+import { addPostAction } from '../modules/post';
 
 function PostForm() {
   const dispatch = useDispatch();
   const refUpload = useRef();
-  const imagePaths = useSelector(({ post }) => post.imagePaths);
-  const [text, setText, onChangeText] = useInput('');
+  const { imagePaths, postError } = useSelector(({ post }) => ({
+    imagePaths: post.imagePaths,
+    postError: post.postError,
+  }));
+  const [text, setText, handleText] = useInput('');
 
   const onClickUpload = useCallback(() => {
     refUpload.current.click;
   }, [refUpload.current]);
   const onSubmit = useCallback(() => {
-    dispatch(addPost());
-    setText('');
-  }, []);
+    dispatch(addPostAction(text));
+  }, [text]);
+
+  useEffect(() => {
+    if (!postError) {
+      setText('');
+    }
+  }, [postError]);
 
   return (
     <Form
@@ -26,7 +34,7 @@ function PostForm() {
     >
       <Input.TextArea
         value={text}
-        onChange={onChangeText}
+        onChange={handleText}
         maxLength={9 * 16}
         placeholder="How are you?"
       />

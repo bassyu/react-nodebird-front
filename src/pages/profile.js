@@ -1,19 +1,11 @@
-import Head from "next/head";
-import AppLayout from "../components/AppLayout";
-import FallowList from "../components/FallowList";
-import NicknameEditForm from "../components/NicknameEditForm";
+import Head from 'next/head';
+import { useSelector } from 'react-redux';
+import AppLayout from '../components/AppLayout';
+import FallowList from '../components/FallowList';
+import NicknameEditForm from '../components/NicknameEditForm';
 
 function Profile() {
-  const fallowerList = [
-    { nickname: "dsds" },
-    { nickname: "where" },
-    { nickname: "jensen" },
-  ];
-  const falloingList = [
-    { nickname: "hello" },
-    { nickname: "dudu" },
-    { nickname: "mike" },
-  ];
+  const { me } = useSelector(({ user }) => ({ me: user.me }));
 
   return (
     <>
@@ -22,8 +14,8 @@ function Profile() {
       </Head>
       <AppLayout>
         <NicknameEditForm />
-        <FallowList header="팔로워 목록" data={fallowerList} />
-        <FallowList header="팔로잉 목록" data={falloingList} />
+        <FallowList header="Follower List" data={me.Followers} />
+        <FallowList header="Following List" data={me.Followings} />
       </AppLayout>
     </>
   );

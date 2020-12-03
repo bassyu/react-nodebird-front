@@ -19,15 +19,15 @@ function UserProfile() {
       <Card
         actions={[
           <div key="fallowers">
-            fallowers
+            {me.Fallowers.length}
             <br />
           </div>,
           <div key="fallowings">
-            fallowings
+            {me.Fallowings.length}
             <br />
           </div>,
           <div key="twits">
-            twits
+            {me.Posts.length}
             <br />
           </div>,
         ]}

@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button, Carousel } from '../../node_modules/antd/lib/index';
@@ -73,7 +74,7 @@ ImagesZoom.propTypes = {
   images: PropTypes.arrayOf(
     PropTypes.shape({
       src: PropTypes.string,
-    })
+    }),
   ).isRequired,
   onClose: PropTypes.func.isRequired,
 };

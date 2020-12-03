@@ -1,23 +1,36 @@
-import { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input, Form } from '../../node_modules/antd/lib/index';
 import useInput from '../lib/hooks/useInput';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { addCommentAction } from '../modules/post';
 
-function CommentForm({ post }) {
-  const id = useSelector(({ user }) => user.me?.id);
-  const [commentText, , onChangeCommentText] = useInput('');
+function CommentForm({ postData }) {
+  const dispatch = useDispatch();
+  const { id, postError } = useSelector(({ user, post }) => ({
+    id: user.me?.id,
+    postError: post.postError,
+  }));
+  const [commentText, setCommentText, handleCommentText] = useInput('');
 
   const onSubmitComment = useCallback(() => {
-    console.log(post.id, commentText);
+    dispatch(
+      addCommentAction({ content: commentText, postId: postData.id, userId: id }),
+    );
   }, [commentText]);
+
+  useEffect(() => {
+    if (!postError) {
+      setCommentText('');
+    }
+  }, [postError]);
 
   return (
     <Form onFinish={onSubmitComment}>
       <Form.Item>
         <Input.TextArea
           value={commentText}
-          onChange={onChangeCommentText}
+          onChange={handleCommentText}
           rows={4}
         />
         <Button style={{ float: 'right' }} type="primary" htmlType="submit">
@@ -29,7 +42,7 @@ function CommentForm({ post }) {
 }
 
 CommentForm.propTypes = {
-  post: PropTypes.object.isRequired,
+  postData: PropTypes.object.isRequired,
 };
 
 export default CommentForm;

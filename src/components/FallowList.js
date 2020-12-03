@@ -1,6 +1,7 @@
-import { Button, Card, List } from "antd";
-import { StopOutlined } from "@ant-design/icons";
-import PropTypes from "prop-types";
+import React from 'react';
+import { Button, Card, List } from 'antd';
+import { StopOutlined } from '@ant-design/icons';
+import PropTypes from 'prop-types';
 
 function FallowList({ header, data }) {
   return (
@@ -9,11 +10,11 @@ function FallowList({ header, data }) {
       grid={{ gutter: 4, column: 3 }}
       size="small"
       header={<div>{header}</div>}
-      loadMore={
-        <div style={{ textAlign: "center", margin: "1rem 0" }}>
+      loadMore={(
+        <div style={{ textAlign: 'center', margin: '1rem 0' }}>
           <Button>More</Button>
         </div>
-      }
+      )}
       bordered
       dataSource={data}
       renderItem={(item) => (
@@ -23,7 +24,7 @@ function FallowList({ header, data }) {
           </Card>
         </List.Item>
       )}
-    ></List>
+    />
   );
 }
 

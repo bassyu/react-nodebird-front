@@ -1,20 +1,25 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 import Head from 'next/head';
 import { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import AppLayout from '../components/AppLayout';
 import useInput from '../lib/hooks/useInput';
+import { registerAction } from '../modules/user';
 
 const ErrorMessage = styled.div`
   color: red;
 `;
 
 function Signup() {
-  const [id, , onChangeId] = useInput('');
-  const [nickname, , onChangeNickname] = useInput('');
-  const [password, , onChangePassword] = useInput('');
+  const dispatch = useDispatch();
+  const [email, , handleEmail] = useInput('');
+  const [nickname, , handleNickname] = useInput('');
+  const [password, , handlePassword] = useInput('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [passwordError, setPasswordError] = useState(false);
+  const [term, setTerm] = useState(false);
+
   const onChangePasswordCheck = useCallback(
     (e) => {
       setPasswordCheck(e.target.value);
@@ -22,11 +27,9 @@ function Signup() {
     },
     [password]
   );
-  const [term, setTerm] = useState(false);
   const onChangeTerm = useCallback((e) => {
     setTerm(e.target.checked);
   });
-
   const onSubmit = useCallback(() => {
     if (password !== passwordCheck) {
       return setPasswordError(true);
@@ -34,8 +37,8 @@ function Signup() {
     if (!term) {
       return;
     }
-    console.log(id, nickname, password);
-  }, [password, passwordCheck, term]);
+    dispatch(registerAction({ email, password }));
+  }, [email, password, passwordCheck, term]);
 
   return (
     <>
@@ -45,9 +48,15 @@ function Signup() {
       <AppLayout>
         <Form onFinish={onSubmit}>
           <div>
-            <label htmlFor="user-id">ID</label>
+            <label htmlFor="user-email">ID</label>
             <br />
-            <Input name="user-id" value={id} required onChange={onChangeId} />
+            <Input
+              type="email"
+              name="user-email"
+              value={email}
+              required
+              onChange={handleEmail}
+            />
           </div>
           <div>
             <label htmlFor="user-nickname">Nickname</label>
@@ -56,7 +65,7 @@ function Signup() {
               name="user-nickname"
               value={nickname}
               required
-              onChange={onChangeNickname}
+              onChange={handleNickname}
             />
           </div>
           <div>
@@ -67,7 +76,7 @@ function Signup() {
               type="password"
               value={password}
               required
-              onChange={onChangePassword}
+              onChange={handlePassword}
             />
           </div>
           <div>

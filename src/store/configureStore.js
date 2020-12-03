@@ -2,7 +2,7 @@ import { createWrapper } from 'next-redux-wrapper';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from '../modules';
-import { createSagaMiddleware } from 'redux-saga';
+import createSagaMiddleware from 'redux-saga';
 
 function configureStore() {
   const composeMethod =

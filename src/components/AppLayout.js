@@ -1,31 +1,34 @@
-import PropTypes from "prop-types";
-import Link from "next/link";
-import { Col, Input, Menu, Row } from "antd";
-import LoginForm from "./LoginForm";
-import UserProfile from "./UserProfile";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Link from 'next/link';
+import {
+  Col, Input, Menu, Row,
+} from 'antd';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import LoginForm from './LoginForm';
+import UserProfile from './UserProfile';
 
 const AppLayoutBlock = styled.div`
   .search {
-    vertical-align: "middle";
+    vertical-align: 'middle';
   }
 `;
 
 function AppLayout({ children }) {
-  const { isLogin } = useSelector(({ user }) => user);
+  const { me } = useSelector(({ user }) => ({ me: user.me }));
 
   return (
     <AppLayoutBlock>
       <Menu mode="horizontal">
         <Menu.Item>
           <Link href="/">
-            <a>NodeBird</a>
+            <a href>NodeBird</a>
           </Link>
         </Menu.Item>
         <Menu.Item>
           <Link href="/profile">
-            <a>profile</a>
+            <a href>profile</a>
           </Link>
         </Menu.Item>
         <Menu.Item>
@@ -33,13 +36,13 @@ function AppLayout({ children }) {
         </Menu.Item>
         <Menu.Item>
           <Link href="/register">
-            <a>register</a>
+            <a href>register</a>
           </Link>
         </Menu.Item>
       </Menu>
       <Row gutter={8}>
         <Col xs={24} md={6}>
-          {isLogin ? <UserProfile /> : <LoginForm />}
+          {me ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}

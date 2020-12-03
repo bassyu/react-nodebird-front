@@ -1,4 +1,6 @@
-import { Avatar, Button, Card, Comment, List, Popover } from 'antd';
+import {
+  Avatar, Button, Card, Comment, List, Popover,
+} from 'antd';
 import {
   RetweetOutlined,
   HeartOutlined,
@@ -8,10 +10,10 @@ import {
 } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import PostImages from './PostImages';
 import { useCallback, useState } from 'react';
-import CommentForm from './CommentForm';
 import styled from 'styled-components';
+import PostImages from './PostImages';
+import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 
 const PostCardBlock = styled.div`
@@ -52,7 +54,7 @@ function PostCard({ post }) {
           <RetweetOutlined key="retweet" />,
           <Popover
             key="popover"
-            content={
+            content={(
               <Button.Group>
                 {id && post.User.id === id ? (
                   <>
@@ -63,7 +65,7 @@ function PostCard({ post }) {
                   <Button>report</Button>
                 )}
               </Button.Group>
-            }
+            )}
           >
             <EllipsisOutlined />
           </Popover>,
@@ -94,7 +96,7 @@ function PostCard({ post }) {
           />
         </div>
       )}
-      {/*<Comments />*/}
+      {/* <Comments /> */}
     </PostCardBlock>
   );
 }
