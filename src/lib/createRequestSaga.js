@@ -9,7 +9,6 @@ function createRequestSaga(type, api) {
     yield put(startLoadingAction(type));
     try {
       const { payload } = action;
-
       // const response = yield call(api, payload);
       yield put({
         type: SUCCESS,

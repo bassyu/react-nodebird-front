@@ -17,7 +17,7 @@ const LoginFormBlock = styled.div`
 
 function LoginForm() {
   const dispatch = useDispatch();
-  const { loading } = useSelector(({ loading }) => ({ loading }));
+  const { loading } = useSelector((state) => (state));
   const [email, , handleEmail] = useInput('');
   const [password, , handlePassword] = useInput('');
 

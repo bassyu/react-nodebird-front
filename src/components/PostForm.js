@@ -1,5 +1,7 @@
+import React, {
+  useCallback, useEffect, useRef,
+} from 'react';
 import { Button, Form, Input } from 'antd';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useInput from '../lib/hooks/useInput';
 import { addPostAction } from '../modules/post';
@@ -14,7 +16,7 @@ function PostForm() {
   const [text, setText, handleText] = useInput('');
 
   const onClickUpload = useCallback(() => {
-    refUpload.current.click;
+    refUpload.current.click();
   }, [refUpload.current]);
   const onSubmit = useCallback(() => {
     dispatch(addPostAction(text));

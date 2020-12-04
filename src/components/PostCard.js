@@ -1,3 +1,4 @@
+import React, { useCallback, useState } from 'react';
 import {
   Avatar, Button, Card, Comment, List, Popover,
 } from 'antd';
@@ -10,7 +11,6 @@ import {
 } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
@@ -108,6 +108,7 @@ PostCard.propTypes = {
     content: PropTypes.string,
     createdAt: PropTypes.arrayOf(PropTypes.object),
     Images: PropTypes.arrayOf(PropTypes.object),
+    Comments: PropTypes.array,
   }).isRequired,
 };
 

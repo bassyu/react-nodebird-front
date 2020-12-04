@@ -22,7 +22,7 @@ const loading = handleActions(
       [type]: false,
     }),
   },
-  initialState
+  initialState,
 );
 
 export default loading;

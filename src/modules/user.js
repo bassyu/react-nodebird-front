@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
-import createRequestTypes from '../lib/createRequestTypes';
 import { takeLatest } from 'redux-saga/effects';
+import createRequestTypes from '../lib/createRequestTypes';
 import createRequestSaga from '../lib/createRequestSaga';
 
 const createDummyMe = (data) => ({
@@ -14,10 +14,10 @@ const createDummyMe = (data) => ({
 
 // constants
 export const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestTypes(
-  'user/LOGIN'
+  'user/LOGIN',
 );
 export const [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAILURE] = createRequestTypes(
-  'user/LOGOUT'
+  'user/LOGOUT',
 );
 export const [
   REGISTER,
@@ -25,7 +25,7 @@ export const [
   REGISTER_FAILURE,
 ] = createRequestTypes('user/REGISTER');
 export const [FOLLOW, FOLLOW_SUCCESS, FOLLOW_FAILURE] = createRequestTypes(
-  'user/FOLLOW'
+  'user/FOLLOW',
 );
 export const [
   UNFOLLOW,
@@ -83,7 +83,7 @@ const user = handleActions(
       ...state,
       userError: e.response.data,
     }),
-    [LOGOUT_SUCCESS]: (state, { payload: data }) => ({
+    [LOGOUT_SUCCESS]: (state) => ({
       ...state,
       userError: null,
       isLogin: false,
@@ -93,7 +93,7 @@ const user = handleActions(
       ...state,
       userError: e.response.data,
     }),
-    [REGISTER_SUCCESS]: (state, { payload: data }) => ({
+    [REGISTER_SUCCESS]: (state) => ({
       ...state,
       userError: null,
     }),
@@ -101,7 +101,7 @@ const user = handleActions(
       ...state,
       userError: e.response.data,
     }),
-    [CHANGE_NICKNAME_SUCCESS]: (state, { payload: data }) => ({
+    [CHANGE_NICKNAME_SUCCESS]: (state) => ({
       ...state,
       userError: null,
     }),
@@ -110,7 +110,7 @@ const user = handleActions(
       userError: e.response.data,
     }),
   },
-  initialState
+  initialState,
 );
 
 export default user;

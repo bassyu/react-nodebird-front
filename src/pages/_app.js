@@ -1,8 +1,9 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import 'antd/dist/antd.css';
-import wrapper from '../store/configureStore';
 import withReduxSaga from 'next-redux-saga';
+import wrapper from '../store/configureStore';
 
 function App({ Component }) {
   return (
@@ -16,7 +17,7 @@ function App({ Component }) {
   );
 }
 
-App.PropTypes = {
+App.propTypes = {
   Component: PropTypes.elementType.isRequired,
 };
 

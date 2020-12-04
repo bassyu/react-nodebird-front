@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
     {
       [HYDRATE]: (state, action) => ({ ...state, ...action.payload }),
     },
-    {}
+    {},
   ),
   loading,
   user,

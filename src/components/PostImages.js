@@ -1,5 +1,6 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
+import PropTypes from 'prop-types';
 import ImagesZoom from './ImagesZoom';
 
 function PostImages({ images }) {
@@ -79,4 +80,9 @@ function PostImages({ images }) {
     </>
   );
 }
+
+PostImages.propTypes = {
+  images: PropTypes.string.isRequired,
+};
+
 export default PostImages;

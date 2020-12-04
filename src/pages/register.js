@@ -1,6 +1,8 @@
-import { Button, Checkbox, Form, Input } from 'antd';
+import React, { useCallback, useState } from 'react';
+import {
+  Button, Checkbox, Form, Input,
+} from 'antd';
 import Head from 'next/head';
-import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import AppLayout from '../components/AppLayout';
@@ -25,7 +27,7 @@ function Signup() {
       setPasswordCheck(e.target.value);
       setPasswordError(e.target.value !== password);
     },
-    [password]
+    [password],
   );
   const onChangeTerm = useCallback((e) => {
     setTerm(e.target.checked);
@@ -35,9 +37,10 @@ function Signup() {
       return setPasswordError(true);
     }
     if (!term) {
-      return;
+      return undefined;
     }
     dispatch(registerAction({ email, password }));
+    return undefined;
   }, [email, password, passwordCheck, term]);
 
   return (
