@@ -23,12 +23,12 @@ function AppLayout({ children }) {
       <Menu mode="horizontal">
         <Menu.Item>
           <Link href="/">
-            <a href>NodeBird</a>
+            <a>NodeBird</a>
           </Link>
         </Menu.Item>
         <Menu.Item>
           <Link href="/profile">
-            <a href>profile</a>
+            <a>profile</a>
           </Link>
         </Menu.Item>
         <Menu.Item>
@@ -36,7 +36,7 @@ function AppLayout({ children }) {
         </Menu.Item>
         <Menu.Item>
           <Link href="/register">
-            <a href>register</a>
+            <a>register</a>
           </Link>
         </Menu.Item>
       </Menu>

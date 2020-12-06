@@ -2,7 +2,7 @@ import { put } from 'redux-saga/effects';
 import createRequestTypes from './createRequestTypes';
 import { finishLoadingAction, startLoadingAction } from '../modules/loading';
 
-function createRequestSaga(type, api) {
+function createRequestSaga(type) {
   const [, SUCCESS, FALIURE] = createRequestTypes(type);
 
   function* requestSaga(action) {
@@ -12,12 +12,12 @@ function createRequestSaga(type, api) {
       // const response = yield call(api, payload);
       yield put({
         type: SUCCESS,
-        data: payload,
+        payload,
       });
     } catch (e) {
       yield put({
         type: FALIURE,
-        e,
+        payload: e,
       });
     }
     yield put(finishLoadingAction(type));

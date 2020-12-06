@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import shortid from 'shortid';
 import Link from 'next/link';
 
 function PostCardContent({ content }) {
@@ -8,7 +9,7 @@ function PostCardContent({ content }) {
       {content.split(/(#[^\s#]+)/g).map((string) => {
         if (string.match(/(#[^\s#]+)/g)) {
           return (
-            <Link href={`/hashtag/${string.slice(1)}`}>
+            <Link key={shortid.generate()} href={`/hashtag/${string.slice(1)}`}>
               <a>{string}</a>
             </Link>
           );

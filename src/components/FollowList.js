@@ -3,7 +3,7 @@ import { Button, Card, List } from 'antd';
 import { StopOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 
-function FallowList({ header, data }) {
+function FollowList({ header, data }) {
   return (
     <List
       style={{ marginBottom: 20 }}
@@ -28,9 +28,9 @@ function FallowList({ header, data }) {
   );
 }
 
-FallowList.propTypes = {
+FollowList.propTypes = {
   header: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired,
 };
 
-export default FallowList;
+export default FollowList;

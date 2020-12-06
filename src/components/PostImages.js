@@ -82,7 +82,7 @@ function PostImages({ images }) {
 }
 
 PostImages.propTypes = {
-  images: PropTypes.string.isRequired,
+  images: PropTypes.array.isRequired,
 };
 
 export default PostImages;

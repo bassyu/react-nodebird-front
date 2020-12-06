@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import { useSelector } from 'react-redux';
 import AppLayout from '../components/AppLayout';
-import FallowList from '../components/FallowList';
+import FollowList from '../components/FollowList';
 import NicknameEditForm from '../components/NicknameEditForm';
 
 function Profile() {
@@ -15,8 +15,8 @@ function Profile() {
       </Head>
       <AppLayout>
         <NicknameEditForm />
-        <FallowList header="Follower List" data={me.Followers} />
-        <FallowList header="Following List" data={me.Followings} />
+        <FollowList header="Follower List" data={me.Followers} />
+        <FollowList header="Following List" data={me.Followings} />
       </AppLayout>
     </>
   );

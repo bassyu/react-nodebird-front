@@ -1,13 +1,13 @@
+import React, { useCallback } from 'react';
 import { Card, Avatar, Button } from 'antd';
-import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LOGOUT, logoutAction } from '../modules/user';
 
 function UserProfile() {
   const dispatch = useDispatch();
-  const { me, loading } = useSelector(({ user, loading }) => ({
+  const { loading } = useSelector((state) => state);
+  const { me } = useSelector(({ user }) => ({
     me: user.me,
-    loading,
   }));
 
   const onLogout = useCallback(() => {
@@ -18,12 +18,12 @@ function UserProfile() {
     <>
       <Card
         actions={[
-          <div key="fallowers">
-            {me.Fallowers.length}
+          <div key="followers">
+            {me.Followers.length}
             <br />
           </div>,
-          <div key="fallowings">
-            {me.Fallowings.length}
+          <div key="followings">
+            {me.Followings.length}
             <br />
           </div>,
           <div key="twits">
