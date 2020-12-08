@@ -11,6 +11,11 @@ export const [
   ADD_POST_FAILURE,
 ] = createRequestTypes('post/ADD_POST');
 export const [
+  REMOVE_POST,
+  REMOVE_POST_SUCCESS,
+  REMOVE_POST_FAILURE,
+] = createRequestTypes('post/REMOVE_POST');
+export const [
   ADD_COMMENT,
   ADD_COMMENT_SUCCESS,
   ADD_COMMENT_FAILURE,
@@ -18,13 +23,16 @@ export const [
 
 // actions
 export const addPostAction = createAction(ADD_POST);
+export const removePostAction = createAction(REMOVE_POST);
 export const addCommentAction = createAction(ADD_COMMENT);
 
 // middleware
 const addPostSaga = createRequestSaga(ADD_POST);
+const removePostSaga = createRequestSaga(REMOVE_POST);
 const addCommentSaga = createRequestSaga(ADD_COMMENT);
 export function* postSaga() {
   yield takeLatest(ADD_POST, addPostSaga);
+  yield takeLatest(REMOVE_POST, removePostSaga);
   yield takeLatest(ADD_COMMENT, addCommentSaga);
 }
 
@@ -40,25 +48,32 @@ const initialState = {
       content: 'dldldl #tag #tag #hash',
       Images: [
         {
+          id: shortid.generate(),
           src:
             'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
         },
         {
+          id: shortid.generate(),
           src: 'https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg',
         },
         {
+          id: shortid.generate(),
           src: 'https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg',
         },
       ],
       Comments: [
         {
+          id: shortid.generate(),
           User: {
+            id: shortid.generate(),
             nickname: 'guitaryu',
           },
           content: 'hihihihihi',
         },
         {
+          id: shortid.generate(),
           User: {
+            id: shortid.generate(),
             nickname: 'drumyu',
           },
           content: 'hello',
@@ -71,12 +86,12 @@ const initialState = {
 };
 
 const createDummyPost = (data) => ({
-  id: shortid.generate(),
+  id: data.id,
   User: {
     id: 1,
     nickname: 'bassyu',
   },
-  content: data,
+  content: data.content,
   Images: [],
   Comments: [],
 });
@@ -98,6 +113,15 @@ const post = handleActions(
       mainPosts: [createDummyPost(data), ...state.mainPosts],
     }),
     [ADD_POST_FAILURE]: (state, { payload: e }) => ({
+      ...state,
+      postError: e.response.data,
+    }),
+    [REMOVE_POST_SUCCESS]: (state, { payload: id }) => ({
+      ...state,
+      postError: null,
+      mainPosts: state.mainPosts.filter((i) => i.id !== id),
+    }),
+    [REMOVE_POST_FAILURE]: (state, { payload: e }) => ({
       ...state,
       postError: e.response.data,
     }),

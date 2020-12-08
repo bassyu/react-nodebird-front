@@ -35,6 +35,7 @@ function PostCard({ post }) {
   const onClickComment = useCallback(() => {
     setCommentFormOpend((prev) => !prev);
   }, []);
+  const onRemovePost= useCallback(() => )
 
   return (
     <PostCardBlock>
@@ -44,11 +45,11 @@ function PostCard({ post }) {
           liked ? (
             <HeartTwoTone
               twoToneColor="red"
-              key="heart"
+              key="like"
               onClick={onClickLike}
             />
           ) : (
-            <HeartOutlined key="heart" onClick={onClickLike} />
+            <HeartOutlined key="like" onClick={onClickLike} />
           ),
           <MessageOutlined key="message" onClick={onClickComment} />,
           <RetweetOutlined key="retweet" />,
