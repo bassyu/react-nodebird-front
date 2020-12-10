@@ -1,6 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest, delay, put } from 'redux-saga/effects';
 import shortid from 'shortid';
+import produce from 'immer';
 import createRequestSaga from '../lib/createRequestSaga';
 import createRequestTypes from '../lib/createRequestTypes';
 import { finishLoadingAction, startLoadingAction } from './loading';
@@ -26,7 +27,7 @@ export const [
 // actions
 export const addPostAction = createAction(ADD_POST, (data) => data);
 export const removePostAction = createAction(REMOVE_POST, (id) => id);
-export const addCommentAction = createAction(ADD_COMMENT);
+export const addCommentAction = createAction(ADD_COMMENT, (data) => data);
 
 // middleware
 function* addPostSaga(action) {
@@ -94,10 +95,6 @@ const initialState = {
           id: shortid.generate(),
           src: 'https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg',
         },
-        {
-          id: shortid.generate(),
-          src: 'https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg',
-        },
       ],
       Comments: [
         {
@@ -152,34 +149,25 @@ const post = handleActions(
     }),
     [ADD_POST_FAILURE]: (state, { payload: e }) => ({
       ...state,
-      postError: e.response.data,
+      postError: e,
     }),
     [REMOVE_POST_SUCCESS]: (state, { payload: id }) => ({
       ...state,
       postError: null,
-      mainPosts: state.mainPosts.filter((i) => i.id !== id),
+      mainPosts: state.mainPosts.filter((mainPost) => mainPost.id !== id),
     }),
     [REMOVE_POST_FAILURE]: (state, { payload: e }) => ({
       ...state,
-      postError: e.response.data,
+      postError: e,
     }),
-    [ADD_COMMENT_SUCCESS]: (state, { payload: data }) => {
-      const mainPosts = [...state.mainPosts];
-      const index = mainPosts.findIndex((i) => i.id === data.postId);
-      const indexPost = mainPosts[index];
-      mainPosts[index] = {
-        ...indexPost,
-        Comments: [createDummyComment(data), ...indexPost.Comments],
-      };
-      return {
-        ...state,
-        postError: null,
-        mainPosts,
-      };
-    },
+    [ADD_COMMENT_SUCCESS]: (state, { payload: data }) => produce(state, (draft) => {
+      draft.postError = null;
+      const mainPostFinded = draft.mainPosts.find((mainPost) => mainPost.id === data.postId);
+      mainPostFinded.Comments.unshift(createDummyComment(data.content));
+    }),
     [ADD_COMMENT_FAILURE]: (state, { payload: e }) => ({
       ...state,
-      postError: e.response.data,
+      postError: e,
     }),
   },
   initialState,

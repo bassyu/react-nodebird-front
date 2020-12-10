@@ -3,21 +3,26 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input, Form } from '../../node_modules/antd/lib/index';
 import useInput from '../lib/hooks/useInput';
-import { addCommentAction } from '../modules/post';
+import { addCommentAction, ADD_COMMENT } from '../modules/post';
 
-function CommentForm({ postData }) {
+function CommentForm({ post }) {
   const dispatch = useDispatch();
-  const { id, postError } = useSelector(({ user, post }) => ({
-    id: user.me?.id,
+  const { loading } = useSelector((state) => state);
+  const { me, postError } = useSelector(({ user, post }) => ({
+    me: user.me,
     postError: post.postError,
   }));
   const [commentText, setCommentText, handleCommentText] = useInput('');
 
   const onSubmitComment = useCallback(() => {
     dispatch(
-      addCommentAction({ content: commentText, postId: postData.id, userId: id }),
+      addCommentAction({
+        postId: post.id,
+        userId: me.id,
+        content: commentText,
+      }),
     );
-  }, [commentText]);
+  }, [post, me, commentText]);
 
   useEffect(() => {
     if (!postError) {
@@ -33,7 +38,7 @@ function CommentForm({ postData }) {
           onChange={handleCommentText}
           rows={4}
         />
-        <Button style={{ float: 'right' }} type="primary" htmlType="submit">
+        <Button loading={loading[ADD_COMMENT]} style={{ float: 'right' }} type="primary" htmlType="submit">
           submit
         </Button>
       </Form.Item>
@@ -42,7 +47,7 @@ function CommentForm({ postData }) {
 }
 
 CommentForm.propTypes = {
-  postData: PropTypes.object.isRequired,
+  post: PropTypes.object.isRequired,
 };
 
 export default CommentForm;

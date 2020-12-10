@@ -1,24 +1,8 @@
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
+import produce from 'immer';
 import createRequestTypes from '../lib/createRequestTypes';
 import createRequestSaga from '../lib/createRequestSaga';
-
-const createDummyMe = (data) => ({
-  ...data,
-  nickname: 'bassyu',
-  id: 1,
-  Posts: [{ id: 1 }],
-  Followings: [
-    { nickname: 'a' },
-    { nickname: 'b' },
-    { nickname: 'c' },
-  ],
-  Followers: [
-    { nickname: 'a' },
-    { nickname: 'b' },
-    { nickname: 'c' },
-  ],
-});
 
 // constants
 export const ADD_POST_ME = 'user/ADD_POST_ME';
@@ -83,23 +67,32 @@ const initialState = {
   userError: null,
 };
 
+const createDummyMe = (data) => ({
+  ...data,
+  nickname: 'bassyu',
+  id: 1,
+  Posts: [{ id: 1 }],
+  Followings: [
+    { nickname: 'a' },
+    { nickname: 'b' },
+    { nickname: 'c' },
+  ],
+  Followers: [
+    { nickname: 'a' },
+    { nickname: 'b' },
+    { nickname: 'c' },
+  ],
+});
+
 const user = handleActions(
   {
-    [ADD_POST_ME]: (state, { payload: id }) => ({
-      ...state,
-      userError: null,
-      me: {
-        ...state.me,
-        Posts: [{ id }, ...state.me.Posts],
-      },
+    [ADD_POST_ME]: (state, { payload: id }) => produce(state, (draft) => {
+      draft.userError = null;
+      draft.me.Posts.unshift({ id });
     }),
-    [REMOVE_POST_ME]: (state, { payload: id }) => ({
-      ...state,
-      userError: null,
-      me: {
-        ...state.me,
-        Posts: state.me.Posts.filter((i) => i.id !== id),
-      },
+    [REMOVE_POST_ME]: (state, { payload: id }) => produce(state, (draft) => {
+      draft.userError = null;
+      draft.me.Posts = draft.me.Posts.filter((post) => post.id !== id);
     }),
     [LOGIN_SUCCESS]: (state, { payload: data }) => ({
       ...state,
@@ -109,7 +102,7 @@ const user = handleActions(
     }),
     [LOGIN_FAILURE]: (state, { payload: e }) => ({
       ...state,
-      userError: e.response.data,
+      userError: e,
     }),
     [LOGOUT_SUCCESS]: (state) => ({
       ...state,
@@ -119,7 +112,7 @@ const user = handleActions(
     }),
     [LOGOUT_FAILURE]: (state, { payload: e }) => ({
       ...state,
-      userError: e.response.data,
+      userError: e,
     }),
     [REGISTER_SUCCESS]: (state) => ({
       ...state,
@@ -127,7 +120,7 @@ const user = handleActions(
     }),
     [REGISTER_FAILURE]: (state, { payload: e }) => ({
       ...state,
-      userError: e.response.data,
+      userError: e,
     }),
     [CHANGE_NICKNAME_SUCCESS]: (state) => ({
       ...state,
@@ -135,7 +128,7 @@ const user = handleActions(
     }),
     [CHANGE_NICKNAME_FAILURE]: (state, { payload: e }) => ({
       ...state,
-      userError: e.response.data,
+      userError: e,
     }),
   },
   initialState,
