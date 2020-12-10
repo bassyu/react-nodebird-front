@@ -3,12 +3,14 @@ import React, {
 } from 'react';
 import { Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import shortid from 'shortid';
 import useInput from '../lib/hooks/useInput';
-import { addPostAction } from '../modules/post';
+import { addPostAction, ADD_POST } from '../modules/post';
 
 function PostForm() {
   const dispatch = useDispatch();
   const refUpload = useRef();
+  const { loading } = useSelector((state) => state);
   const { imagePaths, postError } = useSelector(({ post }) => ({
     imagePaths: post.imagePaths,
     postError: post.postError,
@@ -19,7 +21,8 @@ function PostForm() {
     refUpload.current.click();
   }, [refUpload.current]);
   const onSubmit = useCallback(() => {
-    dispatch(addPostAction(text));
+    const id = shortid.generate();
+    dispatch(addPostAction({ id, content: text }));
   }, [text]);
 
   useEffect(() => {
@@ -43,7 +46,7 @@ function PostForm() {
       <div>
         <input type="file" multiple hidden ref={refUpload} />
         <Button onClick={onClickUpload}>Upload</Button>
-        <Button type="primary" style={{ float: 'right' }} htmlType="submit">
+        <Button type="primary" style={{ float: 'right' }} htmlType="submit" loading={loading[ADD_POST]}>
           Submit
         </Button>
       </div>

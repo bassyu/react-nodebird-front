@@ -9,12 +9,13 @@ import {
   EllipsisOutlined,
   HeartTwoTone,
 } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
+import { removePostAction, REMOVE_POST } from '../modules/post';
 
 const PostCardBlock = styled.div`
   margin: 1.5rem;
@@ -25,7 +26,10 @@ const PostCardBlock = styled.div`
 `;
 
 function PostCard({ post }) {
-  const id = useSelector(({ user }) => user.me?.id); // me && me.id
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state);
+  const { id } = useSelector(({ user }) => ({ id: user.me?.id })); // me && me.id
+
   const [liked, setLiked] = useState(false);
   const [commentFormOpened, setCommentFormOpend] = useState(false);
 
@@ -35,7 +39,9 @@ function PostCard({ post }) {
   const onClickComment = useCallback(() => {
     setCommentFormOpend((prev) => !prev);
   }, []);
-  const onRemovePost= useCallback(() => )
+  const onRemovePost = useCallback(() => {
+    dispatch(removePostAction(post.id));
+  });
 
   return (
     <PostCardBlock>
@@ -60,7 +66,7 @@ function PostCard({ post }) {
                 {id && post.User.id === id ? (
                   <>
                     <Button>edit</Button>
-                    <Button type="denger">remove</Button>
+                    <Button type="danger" loading={loading[REMOVE_POST]} onClick={onRemovePost}>remove</Button>
                   </>
                 ) : (
                   <Button>report</Button>

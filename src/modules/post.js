@@ -1,8 +1,10 @@
 import { createAction, handleActions } from 'redux-actions';
-import { takeLatest } from 'redux-saga/effects';
+import { takeLatest, delay, put } from 'redux-saga/effects';
 import shortid from 'shortid';
 import createRequestSaga from '../lib/createRequestSaga';
 import createRequestTypes from '../lib/createRequestTypes';
+import { finishLoadingAction, startLoadingAction } from './loading';
+import { addPostMeAction, removePostMeAction } from './user';
 
 // constants
 export const [
@@ -22,13 +24,49 @@ export const [
 ] = createRequestTypes('post/ADD_COMMENT');
 
 // actions
-export const addPostAction = createAction(ADD_POST);
-export const removePostAction = createAction(REMOVE_POST);
+export const addPostAction = createAction(ADD_POST, (data) => data);
+export const removePostAction = createAction(REMOVE_POST, (id) => id);
 export const addCommentAction = createAction(ADD_COMMENT);
 
 // middleware
-const addPostSaga = createRequestSaga(ADD_POST);
-const removePostSaga = createRequestSaga(REMOVE_POST);
+function* addPostSaga(action) {
+  yield put(startLoadingAction(ADD_POST));
+  try {
+    const { payload: data } = action;
+
+    yield delay(1000);
+    yield put({
+      type: ADD_POST_SUCCESS,
+      payload: data,
+    });
+    yield put(addPostMeAction(data.id));
+  } catch (e) {
+    yield put({
+      type: ADD_POST_FAILURE,
+      payload: e,
+    });
+  }
+  yield put(finishLoadingAction(ADD_POST));
+}
+function* removePostSaga(action) {
+  yield put(startLoadingAction(REMOVE_POST));
+  try {
+    const { payload: id } = action;
+
+    yield delay(1000);
+    yield put({
+      type: REMOVE_POST_SUCCESS,
+      payload: id,
+    });
+    yield put(removePostMeAction(id));
+  } catch (e) {
+    yield put({
+      type: REMOVE_POST_FAILURE,
+      payload: e,
+    });
+  }
+  yield put(finishLoadingAction(REMOVE_POST));
+}
 const addCommentSaga = createRequestSaga(ADD_COMMENT);
 export function* postSaga() {
   yield takeLatest(ADD_POST, addPostSaga);
