@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-function useInput(initialState = null) {
+export default function useInput(initialState = null) {
   const [state, setState] = useState(initialState);
   const handleState = useCallback((e) => {
     setState(e.target.value);
@@ -8,5 +8,3 @@ function useInput(initialState = null) {
 
   return [state, setState, handleState];
 }
-
-export default useInput;

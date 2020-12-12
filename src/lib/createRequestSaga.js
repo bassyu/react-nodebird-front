@@ -2,7 +2,7 @@ import { put, delay } from 'redux-saga/effects';
 import createRequestTypes from './createRequestTypes';
 import { finishLoadingAction, startLoadingAction } from '../modules/loading';
 
-function createRequestSaga(type) {
+export default function createRequestSaga(type) {
   const [, SUCCESS, FALIURE] = createRequestTypes(type);
 
   function* requestSaga(action) {
@@ -25,5 +25,3 @@ function createRequestSaga(type) {
   }
   return requestSaga;
 }
-
-export default createRequestSaga;
