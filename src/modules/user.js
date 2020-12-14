@@ -122,6 +122,30 @@ const user = handleActions(
       ...state,
       userError: e,
     }),
+    [FOLLOW_SUCCESS]: (state, { payload: id }) => ({
+      ...state,
+      userError: null,
+      me: {
+        ...state.me,
+        Followings: [{ id }, ...state.me.Followings],
+      },
+    }),
+    [FOLLOW_FAILURE]: (state, { payload: e }) => ({
+      ...state,
+      userError: e,
+    }),
+    [UNFOLLOW_SUCCESS]: (state, { payload: id }) => ({
+      ...state,
+      userError: null,
+      me: {
+        ...state.me,
+        Followings: state.me.Followings.filter((v) => v.id !== id),
+      },
+    }),
+    [UNFOLLOW_FAILURE]: (state, { payload: e }) => ({
+      ...state,
+      userError: e,
+    }),
     [CHANGE_NICKNAME_SUCCESS]: (state) => ({
       ...state,
       userError: null,

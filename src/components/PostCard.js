@@ -16,6 +16,7 @@ import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import { removePostAction, REMOVE_POST } from '../modules/post';
+import FollowButton from './FollowButton';
 
 const PostCardBlock = styled.div`
   margin: 1.5rem;
@@ -77,7 +78,7 @@ function PostCard({ post }) {
             <EllipsisOutlined />
           </Popover>,
         ]}
-        extra={<FallowButton post={post} />}
+        extra={id && <FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}

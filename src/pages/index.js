@@ -19,11 +19,12 @@ function Index() {
   }, []);
   useEffect(() => {
     function onScroll() {
-      if (!loading[LOAD_POSTS] && hasMorePosts && (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 600)) {
+      const currentY = window.scrollY + document.documentElement.clientHeight;
+      const bottomY = document.documentElement.scrollHeight - 600;
+      if (!loading[LOAD_POSTS] && hasMorePosts && (currentY > bottomY)) {
         dispatch(loadPostsActoin());
       }
     }
-
     window.addEventListener('scroll', onScroll);
     return () => {
       window.removeEventListener('scroll', onScroll);
