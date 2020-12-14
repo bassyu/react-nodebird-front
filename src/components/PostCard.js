@@ -77,6 +77,7 @@ function PostCard({ post }) {
             <EllipsisOutlined />
           </Popover>,
         ]}
+        extra={<FallowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
@@ -103,7 +104,6 @@ function PostCard({ post }) {
           />
         </div>
       )}
-      {/* <Comments /> */}
     </PostCardBlock>
   );
 }

@@ -2,12 +2,63 @@ import { createAction, handleActions } from 'redux-actions';
 import { takeLatest, delay, put } from 'redux-saga/effects';
 import shortid from 'shortid';
 import produce from 'immer';
+import faker from 'faker';
 import createRequestSaga from '../lib/createRequestSaga';
 import createRequestTypes from '../lib/createRequestTypes';
 import { finishLoadingAction, startLoadingAction } from './loading';
 import { addPostMeAction, removePostMeAction } from './user';
 
+const createDummyPost = (data) => ({
+  id: data.id,
+  User: {
+    id: 1,
+    nickname: 'bassyu',
+  },
+  content: data.content,
+  Images: [],
+  Comments: [],
+});
+
+const createDummyComment = (data) => ({
+  id: 2,
+  content: data,
+  User: {
+    id: 1,
+    nickname: 'bassyu',
+  },
+});
+
+export const createDummyPosts = (count) => (Array(count).fill().map(() => (
+  {
+    id: shortid.generate(),
+    User: {
+      id: shortid.generate(),
+      nickname: faker.name.findName(),
+    },
+    content: faker.lorem.paragraph(),
+    Images: [
+      {
+        src: faker.image.image(),
+      },
+    ],
+    Comments: [
+      {
+        User: {
+          id: shortid.generate(),
+          nickname: faker.name.findName(),
+        },
+        content: faker.lorem.sentence(),
+      },
+    ],
+  }
+)));
+
 // constants
+export const [
+  LOAD_POSTS,
+  LOAD_POSTS_SUCCESS,
+  LOAD_POSTS_FAILURE,
+] = createRequestTypes('post/LOAD_POSTS');
 export const [
   ADD_POST,
   ADD_POST_SUCCESS,
@@ -25,11 +76,13 @@ export const [
 ] = createRequestTypes('post/ADD_COMMENT');
 
 // actions
+export const loadPostsActoin = createAction(LOAD_POSTS);
 export const addPostAction = createAction(ADD_POST, (data) => data);
 export const removePostAction = createAction(REMOVE_POST, (id) => id);
 export const addCommentAction = createAction(ADD_COMMENT, (data) => data);
 
 // middleware
+const loadPostsSaga = createRequestSaga(LOAD_POSTS);
 function* addPostSaga(action) {
   yield put(startLoadingAction(ADD_POST));
   try {
@@ -70,6 +123,7 @@ function* removePostSaga(action) {
 }
 const addCommentSaga = createRequestSaga(ADD_COMMENT);
 export function* postSaga() {
+  yield takeLatest(LOAD_POSTS, loadPostsSaga);
   yield takeLatest(ADD_POST, addPostSaga);
   yield takeLatest(REMOVE_POST, removePostSaga);
   yield takeLatest(ADD_COMMENT, addCommentSaga);
@@ -116,32 +170,23 @@ const initialState = {
       ],
     },
   ],
+  hasMorePosts: true,
   imagePaths: [],
   postError: null,
 };
 
-const createDummyPost = (data) => ({
-  id: data.id,
-  User: {
-    id: 1,
-    nickname: 'bassyu',
-  },
-  content: data.content,
-  Images: [],
-  Comments: [],
-});
-
-const createDummyComment = (data) => ({
-  id: 2,
-  content: data,
-  User: {
-    id: 1,
-    nickname: 'bassyu',
-  },
-});
-
 const post = handleActions(
   {
+    [LOAD_POSTS_SUCCESS]: (state) => ({
+      ...state,
+      postError: null,
+      hasMorePosts: state.mainPosts.length < 50,
+      mainPosts: state.mainPosts.concat(createDummyPosts(10)),
+    }),
+    [LOAD_POSTS_FAILURE]: (state, { payload: e }) => ({
+      ...state,
+      postError: e,
+    }),
     [ADD_POST_SUCCESS]: (state, { payload: data }) => ({
       ...state,
       postError: null,

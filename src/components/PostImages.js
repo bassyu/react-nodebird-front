@@ -22,6 +22,7 @@ function PostImages({ images }) {
             src={images[0].src}
             alt={images[0].src}
             onClick={onZoom}
+            style={{ width: '100%', display: 'inline-block' }}
           />
         </div>
         {showZoom && <ImagesZoom images={images} onClose={onClose} />}

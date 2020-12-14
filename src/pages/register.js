@@ -13,7 +13,7 @@ const ErrorMessage = styled.div`
   color: red;
 `;
 
-function Signup() {
+function Register() {
   const dispatch = useDispatch();
   const [email, , handleEmail] = useInput('');
   const [nickname, , handleNickname] = useInput('');
@@ -114,4 +114,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default Register;
