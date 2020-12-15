@@ -1,13 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Button, Checkbox, Form, Input,
+  Button, Checkbox, Form, Input, message,
 } from 'antd';
 import Head from 'next/head';
-import { useDispatch } from 'react-redux';
+import Router from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import AppLayout from '../components/AppLayout';
 import useInput from '../lib/hooks/useInput';
-import { registerAction } from '../modules/user';
+import { REGISTER, registerAction } from '../modules/user';
 
 const ErrorMessage = styled.div`
   color: red;
@@ -15,6 +16,11 @@ const ErrorMessage = styled.div`
 
 function Register() {
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state);
+  const { me, userError } = useSelector(({ user }) => ({
+    me: user.me,
+    userError: user.userError,
+  }));
   const [email, , handleEmail] = useInput('');
   const [nickname, , handleNickname] = useInput('');
   const [password, , handlePassword] = useInput('');
@@ -39,9 +45,16 @@ function Register() {
     if (!term) {
       return undefined;
     }
-    dispatch(registerAction({ email, password }));
+    dispatch(registerAction({ email, nickname, password }));
     return undefined;
   }, [email, password, passwordCheck, term]);
+
+  useEffect(() => {
+    if (me) Router.push('/');
+  }, [me]);
+  useEffect(() => {
+    if (userError) message.error(userError);
+  }, [userError]);
 
   return (
     <>
@@ -103,7 +116,7 @@ function Register() {
           </div>
           {term && !passwordError && (
             <div>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" loading={loading[REGISTER]}>
                 Submit
               </Button>
             </div>

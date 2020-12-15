@@ -1,19 +1,18 @@
-import { put, delay } from 'redux-saga/effects';
+import { put, call } from 'redux-saga/effects';
 import createRequestTypes from './createRequestTypes';
 import { finishLoadingAction, startLoadingAction } from '../modules/loading';
 
-export default function createRequestSaga(type) {
+export default function createRequestSaga(type, api) {
   const [, SUCCESS, FALIURE] = createRequestTypes(type);
 
-  function* requestSaga(action) {
+  return function* requestSaga(action) {
     yield put(startLoadingAction(type));
     try {
       const { payload } = action;
-      // const response = yield call(api, payload);
-      yield delay(1000);
+      const response = yield call(api, payload);
       yield put({
         type: SUCCESS,
-        payload,
+        payload: response.data,
       });
     } catch (e) {
       yield put({
@@ -22,6 +21,5 @@ export default function createRequestSaga(type) {
       });
     }
     yield put(finishLoadingAction(type));
-  }
-  return requestSaga;
+  };
 }

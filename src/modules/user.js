@@ -1,8 +1,10 @@
 import { createAction, handleActions } from 'redux-actions';
-import { takeLatest } from 'redux-saga/effects';
+import { takeLatest, put, call } from 'redux-saga/effects';
 import produce from 'immer';
 import createRequestTypes from '../lib/createRequestTypes';
 import createRequestSaga from '../lib/createRequestSaga';
+import * as userAPI from '../lib/api/user';
+import { finishLoadingAction, startLoadingAction } from './loading';
 
 // constants
 export const ADD_POST_ME = 'user/ADD_POST_ME';
@@ -45,7 +47,25 @@ export const changeNicknameAction = createAction(CHANGE_NICKNAME);
 // middleware
 const loginSaga = createRequestSaga(LOGIN, () => {});
 const logoutSaga = createRequestSaga(LOGOUT, () => {});
-const registerSaga = createRequestSaga(REGISTER, () => {});
+function* registerSaga(action) {
+  yield put(startLoadingAction(REGISTER));
+  try {
+    const { payload } = action;
+    const response = yield call(userAPI.register, payload);
+    yield put({
+      type: REGISTER_SUCCESS,
+      payload: response.data,
+    });
+    const { email, password } = payload;
+    yield put(loginAction({ email, password }));
+  } catch (e) {
+    yield put({
+      type: REGISTER_FAILURE,
+      payload: e,
+    });
+  }
+  yield put(finishLoadingAction(REGISTER));
+}
 const followSaga = createRequestSaga(FOLLOW, () => {});
 const unfollowSaga = createRequestSaga(UNFOLLOW, () => {});
 const changeNicknameSaga = createRequestSaga(CHANGE_NICKNAME, () => {});
@@ -65,6 +85,7 @@ const initialState = {
   registerData: {},
   loginData: {},
   userError: null,
+  registerDone: false,
 };
 
 const createDummyMe = (data) => ({

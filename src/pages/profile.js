@@ -15,8 +15,9 @@ function Profile() {
     }
   }, [me && me.id]);
 
-  if (!me) return null;
-
+  if (!me) {
+    return null;
+  }
   return (
     <>
       <Head>
