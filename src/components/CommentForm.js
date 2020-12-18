@@ -34,11 +34,18 @@ function CommentForm({ post }) {
     <Form onFinish={onSubmitComment}>
       <Form.Item>
         <Input.TextArea
+          style={{ height: '1rem' }}
           value={commentText}
           onChange={handleCommentText}
           rows={4}
+          placeholder="commnet"
         />
-        <Button loading={loading[ADD_COMMENT]} style={{ float: 'right' }} type="primary" htmlType="submit">
+        <Button
+          loading={loading[ADD_COMMENT]}
+          style={{ float: 'right' }}
+          type="primary"
+          htmlType="submit"
+        >
           submit
         </Button>
       </Form.Item>

@@ -50,7 +50,7 @@ function Register() {
   }, [email, password, passwordCheck, term]);
 
   useEffect(() => {
-    if (me) Router.push('/');
+    if (me) Router.replace('/');
   }, [me]);
   useEffect(() => {
     if (userError) message.error(userError);

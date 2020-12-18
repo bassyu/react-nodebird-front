@@ -1,5 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
-import { takeLatest, delay, put } from 'redux-saga/effects';
+import {
+  takeLatest, delay, put, call,
+} from 'redux-saga/effects';
 import shortid from 'shortid';
 import produce from 'immer';
 import faker from 'faker';
@@ -7,6 +9,7 @@ import createRequestSaga from '../lib/createRequestSaga';
 import createRequestTypes from '../lib/createRequestTypes';
 import { finishLoadingAction, startLoadingAction } from './loading';
 import { addPostMeAction, removePostMeAction } from './user';
+import * as postAPI from '../lib/api/post';
 
 const createDummyPost = (data) => ({
   id: data.id,
@@ -77,23 +80,28 @@ export const [
 
 // actions
 export const loadPostsActoin = createAction(LOAD_POSTS);
-export const addPostAction = createAction(ADD_POST, (data) => data);
+export const addPostAction = createAction(ADD_POST);
 export const removePostAction = createAction(REMOVE_POST, (id) => id);
 export const addCommentAction = createAction(ADD_COMMENT, (data) => data);
 
 // middleware
-const loadPostsSaga = createRequestSaga(LOAD_POSTS);
+// const loadPostsSaga = createRequestSaga(LOAD_POSTS, () => {});
+function* loadPostsSaga() {
+  yield put({
+    type: LOAD_POSTS_SUCCESS,
+  });
+}
 function* addPostSaga(action) {
   yield put(startLoadingAction(ADD_POST));
   try {
-    const { payload: data } = action;
-
-    yield delay(1000);
+    const { payload } = action;
+    const response = yield call(postAPI.addPost, payload);
     yield put({
       type: ADD_POST_SUCCESS,
-      payload: data,
+      payload: response.data,
     });
-    yield put(addPostMeAction(data.id));
+    const { id } = payload;
+    yield put(addPostMeAction(id));
   } catch (e) {
     yield put({
       type: ADD_POST_FAILURE,
@@ -190,7 +198,7 @@ const post = handleActions(
     [ADD_POST_SUCCESS]: (state, { payload: data }) => ({
       ...state,
       postError: null,
-      mainPosts: [createDummyPost(data), ...state.mainPosts],
+      mainPosts: [data, ...state.mainPosts],
     }),
     [ADD_POST_FAILURE]: (state, { payload: e }) => ({
       ...state,
@@ -207,8 +215,8 @@ const post = handleActions(
     }),
     [ADD_COMMENT_SUCCESS]: (state, { payload: data }) => produce(state, (draft) => {
       draft.postError = null;
-      const mainPostFinded = draft.mainPosts.find((mainPost) => mainPost.id === data.postId);
-      mainPostFinded.Comments.unshift(createDummyComment(data.content));
+      const foundPost = draft.mainPosts.find((v) => v.id === data.PostId);
+      foundPost.Comments.unshift(data);
     }),
     [ADD_COMMENT_FAILURE]: (state, { payload: e }) => ({
       ...state,

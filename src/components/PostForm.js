@@ -22,7 +22,10 @@ function PostForm() {
   }, [refUpload.current]);
   const onSubmit = useCallback(() => {
     const id = shortid.generate();
-    dispatch(addPostAction({ id, content: text }));
+    dispatch(addPostAction({
+      id,
+      content: text,
+    }));
   }, [text]);
 
   useEffect(() => {

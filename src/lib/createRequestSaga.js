@@ -15,6 +15,7 @@ export default function createRequestSaga(type, api) {
         payload: response.data,
       });
     } catch (e) {
+      console.log(e);
       yield put({
         type: FALIURE,
         payload: e,

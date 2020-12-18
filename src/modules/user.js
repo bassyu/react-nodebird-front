@@ -7,22 +7,29 @@ import * as userAPI from '../lib/api/user';
 import { finishLoadingAction, startLoadingAction } from './loading';
 
 // constants
+export const CHANGE_FIELD = 'user/CHANGE_FIELD';
 export const ADD_POST_ME = 'user/ADD_POST_ME';
 export const REMOVE_POST_ME = 'user/REMOVE_POST_ME';
-export const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestTypes(
-  'user/LOGIN',
-);
-export const [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAILURE] = createRequestTypes(
-  'user/LOGOUT',
-);
+export const [
+  LOGIN,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+] = createRequestTypes('user/LOGIN');
+export const [
+  LOGOUT,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
+] = createRequestTypes('user/LOGOUT');
 export const [
   REGISTER,
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
 ] = createRequestTypes('user/REGISTER');
-export const [FOLLOW, FOLLOW_SUCCESS, FOLLOW_FAILURE] = createRequestTypes(
-  'user/FOLLOW',
-);
+export const [
+  FOLLOW,
+  FOLLOW_SUCCESS,
+  FOLLOW_FAILURE,
+] = createRequestTypes('user/FOLLOW');
 export const [
   UNFOLLOW,
   UNFOLLOW_SUCCESS,
@@ -35,18 +42,19 @@ export const [
 ] = createRequestTypes('user/CHANGE_NICKNAME');
 
 // actions
+export const changeFieldAction = createAction(CHANGE_FIELD);
 export const addPostMeAction = createAction(ADD_POST_ME);
 export const removePostMeAction = createAction(REMOVE_POST_ME);
-export const loginAction = createAction(LOGIN, (me) => me);
+export const loginAction = createAction(LOGIN);
 export const logoutAction = createAction(LOGOUT);
-export const registerAction = createAction(REGISTER, (data) => data);
+export const registerAction = createAction(REGISTER);
 export const followAction = createAction(FOLLOW);
 export const unfollowAction = createAction(UNFOLLOW);
 export const changeNicknameAction = createAction(CHANGE_NICKNAME);
 
 // middleware
-const loginSaga = createRequestSaga(LOGIN, () => {});
-const logoutSaga = createRequestSaga(LOGOUT, () => {});
+const loginSaga = createRequestSaga(LOGIN, userAPI.login);
+const logoutSaga = createRequestSaga(LOGOUT, userAPI.logout);
 function* registerSaga(action) {
   yield put(startLoadingAction(REGISTER));
   try {
@@ -80,7 +88,6 @@ export function* userSaga() {
 
 // reducer
 const initialState = {
-  isLogin: false,
   me: null,
   registerData: {},
   loginData: {},
@@ -88,25 +95,12 @@ const initialState = {
   registerDone: false,
 };
 
-const createDummyMe = (data) => ({
-  ...data,
-  nickname: 'bassyu',
-  id: 1,
-  Posts: [{ id: 1 }],
-  Followings: [
-    { nickname: 'a' },
-    { nickname: 'b' },
-    { nickname: 'c' },
-  ],
-  Followers: [
-    { nickname: 'a' },
-    { nickname: 'b' },
-    { nickname: 'c' },
-  ],
-});
-
 const user = handleActions(
   {
+    [CHANGE_FIELD]: (state, { payload: { key, value } }) => ({
+      ...state,
+      [key]: value,
+    }),
     [ADD_POST_ME]: (state, { payload: id }) => produce(state, (draft) => {
       draft.userError = null;
       draft.me.Posts.unshift({ id });
@@ -118,17 +112,15 @@ const user = handleActions(
     [LOGIN_SUCCESS]: (state, { payload: data }) => ({
       ...state,
       userError: null,
-      isLogin: true,
-      me: createDummyMe(data),
+      me: data,
     }),
     [LOGIN_FAILURE]: (state, { payload: e }) => ({
       ...state,
-      userError: e,
+      userError: e.response.data,
     }),
     [LOGOUT_SUCCESS]: (state) => ({
       ...state,
       userError: null,
-      isLogin: false,
       me: null,
     }),
     [LOGOUT_FAILURE]: (state, { payload: e }) => ({
